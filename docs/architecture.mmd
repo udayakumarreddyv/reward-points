@@ -1,0 +1,69 @@
+graph TB
+    subgraph Client
+        A[HTTP Client]
+    end
+
+    subgraph Security
+        B[Basic Auth]
+        C[Security Config]
+    end
+
+    subgraph API Layer
+        D[RewardPointsController]
+    end
+
+    subgraph Service Layer
+        E[RewardPointsService]
+        F[RewardPointsServiceImpl]
+    end
+
+    subgraph Configuration
+        G[RewardPointsConfig]
+        H[Points Config]
+        I[Threshold Config]
+    end
+
+    subgraph Data Models
+        J[CustomerTransaction]
+        K[CustomerRewardPoints]
+        L[MonthlyPoints]
+        M[RewardPoint]
+    end
+
+    subgraph Calculation Logic
+        N[Calculate Points]
+        O[First Threshold $50]
+        P[Second Threshold $100]
+    end
+
+    %% Flow connections
+    A -->|Basic Auth|B
+    B -->|Authenticate|C
+    B -->|If Authorized|D
+    D -->|Get Points|F
+    F -->|Implements|E
+    F -->|Uses|G
+    G -->|Contains|H
+    G -->|Contains|I
+    F -->|Creates|K
+    F -->|Processes|J
+    F -->|Calculates|N
+    N -->|Applies|O
+    N -->|Applies|P
+    K -->|Contains|L
+    K -->|Contains|M
+
+    %% Styling
+    classDef controller fill:#f9f,stroke:#333,stroke-width:2px
+    classDef service fill:#bbf,stroke:#333,stroke-width:2px
+    classDef model fill:#dfd,stroke:#333,stroke-width:2px
+    classDef config fill:#fdd,stroke:#333,stroke-width:2px
+    classDef security fill:#ff9,stroke:#333,stroke-width:2px
+    classDef client fill:#fff,stroke:#333,stroke-width:2px
+
+    class D controller
+    class E,F service
+    class J,K,L,M model
+    class G,H,I config
+    class B,C security
+    class A client
